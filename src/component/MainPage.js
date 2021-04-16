@@ -25,8 +25,8 @@ export default class MainPage extends Component {
             longitude: 0,
             regionLatitude: 0,
             regionLongitude: 0,
-            regionLatitudeDelta: 0.05,
-            regionLongitudeDelta: 0.05,
+            regionLatitudeDelta: 0.01,
+            regionLongitudeDelta: 0.01,
             currentPositionLatitude: 0,
             currentPositionLongitude: 0,
             search: '',
@@ -117,14 +117,6 @@ export default class MainPage extends Component {
                         latitudeDelta: this.state.regionLatitudeDelta,
                         longitudeDelta: this.state.regionLongitudeDelta
                     }}
-                    onRegionChangeComplete={(region) => {
-                        this.setState({
-                            regionLatitude: region.latitude,
-                            regionLongitude: region.longitude,
-                            regionLatitudeDelta: region.latitudeDelta,
-                            regionLongitudeDelta: region.longitudeDelta
-                        })
-                    }}
                     onPress={() => { this.clear() }}
                 >
                     {this.state.location ?
@@ -132,26 +124,35 @@ export default class MainPage extends Component {
                             onPress={() => this.clear()} /> : <View />}
                     {this.state.latitude != 0 && this.state.longitude != 0 ?
                         <Marker coordinate={{ latitude: this.state.latitude, longitude: this.state.longitude }}
-                            onPress={() => { this.setState({ info: true, direct: true }), this.getLog(); }} /> : <View />}
+                            onPress={() => { this.setState({ info: true, direct: true }), this.getLog(); }}
+                        >
+                            {this.state.item.types == 'gas' ? <Image source={require('../pictures/pointer_gas.png')} style={{ width: 60, height: 60 }} />
+                                : this.state.item.types == 'ATM' ? <Image source={require('../pictures/pointer_atm.png')} style={{ width: 60, height: 60 }} />
+                                    : <View />}
+                        </Marker> : <View />}
                     {this.state.direct ?
                         <MapViewDirections
                             origin={{ latitude: this.state.currentPositionLatitude, longitude: this.state.currentPositionLongitude }}
                             destination={{ latitude: this.state.item.latitude, longitude: this.state.item.longitude }}
                             apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
                             strokeWidth={3}
-                            strokeColor="hotpink"
+                            strokeColor='red'
                         /> : <View />}
                 </MapView>
                 <View style={styles.findingBox}>
                     <Image source={require('../pictures/map.png')} style={{ width: 30, height: 30 }} />
                     <TextInput
-                        style={{ width: width }}
+                        style={{ width: width * 4 / 5 }}
                         placeholder='Tìm kiếm địa điểm'
                         onChangeText={this.updateSearch}
-                        value={search}
+                        value={this.state.search}
                         maxLength={45}
                         onFocus={onFocus}
                     />
+                    {this.state.search != '' ?
+                        <TouchableOpacity onPress={() => this.setState({ search: '' })}>
+                            <Image source={require('../pictures/clear.png')} style={{ width: 20, height: 20 }} />
+                        </TouchableOpacity> : <View />}
                 </View>
                 {this.state.isFocus ?
                     <ScrollView style={styles.listSearch} keyboardShouldPersistTaps='handled'>

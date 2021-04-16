@@ -12,7 +12,7 @@ export default class List extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listGas: false,
+            listGas: true,
             listATM: false,
             isLoading: true,
             dataSource: [],
@@ -62,7 +62,7 @@ export default class List extends Component {
                                 style={{ height: 40, width: 150 }}
                                 onValueChange={(itemValue) => this.setState({ filter: itemValue, refresh: !this.state.refresh })}
                             >
-                                <Picker.Item label=' ' s value=' ' />
+                                <Picker.Item label='Tất cả' value=' ' />
                                 <Picker.Item label='RON 95' value='RON 95' />
                                 <Picker.Item label='RON 92' value='RON 92' />
                                 <Picker.Item label='Diesel' value='Diesel' />
@@ -75,7 +75,7 @@ export default class List extends Component {
                                 style={{ height: 40, width: 150 }}
                                 onValueChange={(itemValue) => this.setState({ filter: itemValue, refresh: !this.state.refresh })}
                             >
-                                <Picker.Item label=' ' value=' ' />
+                                <Picker.Item label='Tất cả' value=' ' />
                                 <Picker.Item label='Nộp tiền' value='Nộp tiền' />
                                 <Picker.Item label='Rút tiền' value='Rút tiền' />
                                 <Picker.Item label='Chuyển tiền' value='Chuyển tiền' />
@@ -90,8 +90,8 @@ export default class List extends Component {
                         <FlatList
                             data={this.state.dataSource}
                             renderItem={({ item }) => {
-                                return (<View>{item.types == 'gas' && Filter({ services: item.services, check: this.state.filter }) == true ?
-                                    <TouchableOpacity style={styles.itemList} onPress={() => this.props.navigation.navigate("MainPage")}>
+                                return (<View>{item.types == 'gas' && Filter({ services: item.services, check: this.state.filter }) ?
+                                    <TouchableOpacity style={styles.itemList} onPress={() => this.props.navigation.navigate('MainPage')}>
                                         <Text style={styles.name}>{item.name}</Text>
                                         <Text>Dịch vụ: {item.services}</Text>
                                     </TouchableOpacity> : <View />}</View>)
@@ -105,11 +105,11 @@ export default class List extends Component {
                         <FlatList
                             data={this.state.dataSource}
                             renderItem={({ item }) => {
-                                return (<View>{item.types == 'ATM' && Filter({ services: item.services, check: this.state.filter }) == true ?
-                                    <View style={styles.itemList}>
+                                return (<View>{item.types == 'ATM' && Filter({ services: item.services, check: this.state.filter }) ?
+                                    <TouchableOpacity style={styles.itemList} onPress={() => this.props.navigation.navigate('  MainPage')}>
                                         <Text style={styles.name}>{item.name}</Text>
                                         <Text>Dịch vụ: {item.services}</Text>
-                                    </View> : <View />}</View>)
+                                    </TouchableOpacity> : <View />}</View>)
                             }}
                             extraData={this.state.refresh}
                         />

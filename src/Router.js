@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import IonIcons from 'react-native-ionicons';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from "react-navigation";
 import MainPage from './component/MainPage';
 import List from './component/List'
 
 export const Router = createAppContainer(createBottomTabNavigator({
-    Map: {
+    MainPage: {
         screen: MainPage,
         navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
@@ -29,3 +30,15 @@ export const Router = createAppContainer(createBottomTabNavigator({
             inactiveTintColor: 'grey'
         }
     }));
+
+export const ListStack = createStackNavigator({
+    Router: {
+        screen: Router,
+    },
+    Router: {
+        screen: Router,
+    },
+},
+    {
+        headerMode: 'none',
+    });
