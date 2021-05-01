@@ -93,7 +93,8 @@ export const styles = StyleSheet.create({
   },
   infoName: {
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black',
   },
   infoAddress: {
     fontSize: 14,

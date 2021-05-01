@@ -4,7 +4,6 @@ import { Picker } from '@react-native-picker/picker';
 import { styles } from '../StyleSheet';
 import { Filter } from '../function/Filter';
 import { FetchData } from '../function/FetchData';
-import MainPage from './MainPage';
 
 let { height, width } = Dimensions.get('window');
 
@@ -91,7 +90,7 @@ export default class List extends Component {
                             data={this.state.dataSource}
                             renderItem={({ item }) => {
                                 return (<View>{item.types == 'gas' && Filter({ services: item.services, check: this.state.filter }) ?
-                                    <TouchableOpacity style={styles.itemList} onPress={() => this.props.navigation.navigate('MainPage')}>
+                                    <TouchableOpacity style={styles.itemList} onPress={() => this.props.navigation.navigate('Map')}>
                                         <Text style={styles.name}>{item.name}</Text>
                                         <Text>Dịch vụ: {item.services}</Text>
                                     </TouchableOpacity> : <View />}</View>)
@@ -106,7 +105,7 @@ export default class List extends Component {
                             data={this.state.dataSource}
                             renderItem={({ item }) => {
                                 return (<View>{item.types == 'ATM' && Filter({ services: item.services, check: this.state.filter }) ?
-                                    <TouchableOpacity style={styles.itemList} onPress={() => this.props.navigation.navigate('  MainPage')}>
+                                    <TouchableOpacity style={styles.itemList} onPress={() => this.props.navigation.navigate('Map')}>
                                         <Text style={styles.name}>{item.name}</Text>
                                         <Text>Dịch vụ: {item.services}</Text>
                                     </TouchableOpacity> : <View />}</View>)

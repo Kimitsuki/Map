@@ -117,6 +117,14 @@ export default class MainPage extends Component {
                         latitudeDelta: this.state.regionLatitudeDelta,
                         longitudeDelta: this.state.regionLongitudeDelta
                     }}
+                    onRegionChangeComplete={ region =>
+                        this.setState({
+                            regionLatitude: region.latitude,
+                            regionLongitude: region.longitude,
+                            regionLatitudeDelta: region.latitudeDelta,
+                            regionLongitudeDelta: region.longitudeDelta
+                        })
+                    }
                     onPress={() => { this.clear() }}
                 >
                     {this.state.location ?
@@ -136,7 +144,7 @@ export default class MainPage extends Component {
                             destination={{ latitude: this.state.item.latitude, longitude: this.state.item.longitude }}
                             apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
                             strokeWidth={3}
-                            strokeColor='red'
+                            strokeColor='green'
                         /> : <View />}
                 </MapView>
                 <View style={styles.findingBox}>
@@ -154,56 +162,60 @@ export default class MainPage extends Component {
                             <Image source={require('../pictures/clear.png')} style={{ width: 20, height: 20 }} />
                         </TouchableOpacity> : <View />}
                 </View>
-                {this.state.isFocus ?
-                    <ScrollView style={styles.listSearch} keyboardShouldPersistTaps='handled'>
-                        {this.state.search == '' ?
-                            <FlatList
-                                keyboardShouldPersistTaps='handled'
-                                data={this.state.history}
-                                renderItem={({ item }) => <History fun={() => this.updateSearch(item)} item={item} />}
-                                extraData={this.state.refresh}
-                            />
-                            :
-                            <FlatList
-                                keyboardShouldPersistTaps='handled'
-                                data={this.state.dataSource}
-                                renderItem={({ item }) => <Item fun={() => this.updatePosition(item)} item={item} check={this.state.search} currentLat={this.state.currentPositionLatitude} currentLon={this.state.currentPositionLongitude} />}
-                                extraData={this.state.refresh}
-                            />}
-                    </ScrollView> : <View />}
-                {this.state.info ?
-                    <TouchableOpacity style={styles.info}>
-                        <View style={{ flexDirection: 'row' }}>
-                            {this.state.item.types == 'gas' ? <Image source={require('../pictures/gas.png')} style={{ width: 50, height: 50, marginTop: 5 }} />
-                                : this.state.item.types == 'ATM' ? <Image source={require('../pictures/atm.png')} style={{ width: 50, height: 45, marginTop: 10 }} />
-                                    : <View />}
-                            <View style={{ paddingLeft: 10, paddingRight: 35 }}>
-                                <Text style={styles.infoName}>{this.state.item.name}</Text>
-                                <Text style={styles.infoAddress}>{this.state.item.address}</Text>
+                {
+                    this.state.isFocus ?
+                        <ScrollView style={styles.listSearch} keyboardShouldPersistTaps='handled'>
+                            {this.state.search == '' ?
+                                <FlatList
+                                    keyboardShouldPersistTaps='handled'
+                                    data={this.state.history}
+                                    renderItem={({ item }) => <History fun={() => this.updateSearch(item)} item={item} />}
+                                    extraData={this.state.refresh}
+                                />
+                                :
+                                <FlatList
+                                    keyboardShouldPersistTaps='handled'
+                                    data={this.state.dataSource}
+                                    renderItem={({ item }) => <Item fun={() => this.updatePosition(item)} item={item} check={this.state.search} currentLat={this.state.currentPositionLatitude} currentLon={this.state.currentPositionLongitude} />}
+                                    extraData={this.state.refresh}
+                                />}
+                        </ScrollView> : <View />
+                }
+                {
+                    this.state.info ?
+                        <TouchableOpacity style={styles.info} onPress={() => this.props.navigation.navigate('Info', {item: this.state.item})}>
+                            <View style={{ flexDirection: 'row' }}>
+                                {this.state.item.types == 'gas' ? <Image source={require('../pictures/gas.png')} style={{ width: 50, height: 50, marginTop: 5 }} />
+                                    : this.state.item.types == 'ATM' ? <Image source={require('../pictures/atm.png')} style={{ width: 50, height: 45, marginTop: 10 }} />
+                                        : <View />}
+                                <View style={{ paddingLeft: 10, paddingRight: 35 }}>
+                                    <Text style={styles.infoName}>{this.state.item.name}</Text>
+                                    <Text style={styles.infoAddress}>{this.state.item.address}</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Image source={require('../pictures/open_close.png')} style={{ width: 25, height: 25 }} />
-                            <Text>  </Text>
-                            <Text style={{ alignSelf: 'center' }}>{this.state.item.open_close}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Image source={require('../pictures/services.png')} style={{ width: 25, height: 25 }} />
-                            <Text>  </Text>
-                            <Text style={{ alignSelf: 'center' }}>{this.state.item.services}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Image source={require('../pictures/phone.png')} style={{ width: 25, height: 25 }} />
-                            <Text>  </Text>
-                            <Text style={{ alignSelf: 'center' }}>{this.state.item.phone}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Image source={require('../pictures/email.png')} style={{ width: 25, height: 25 }} />
-                            <Text>  </Text>
-                            <Text style={{ alignSelf: 'center' }}>{this.state.item.email}</Text>
-                        </View>
-                    </TouchableOpacity> : <View />}
-            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image source={require('../pictures/open_close.png')} style={{ width: 25, height: 25 }} />
+                                <Text>  </Text>
+                                <Text style={{ alignSelf: 'center' }}>{this.state.item.open_close}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image source={require('../pictures/services.png')} style={{ width: 25, height: 25 }} />
+                                <Text>  </Text>
+                                <Text style={{ alignSelf: 'center' }}>{this.state.item.services}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image source={require('../pictures/phone.png')} style={{ width: 25, height: 25 }} />
+                                <Text>  </Text>
+                                <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}>{this.state.item.phone}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image source={require('../pictures/email.png')} style={{ width: 25, height: 25 }} />
+                                <Text>  </Text>
+                                <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { Linking.openURL('mailto:' + this.state.item.email); }}>{this.state.item.email}</Text>
+                            </View>
+                        </TouchableOpacity> : <View />
+                }
+            </View >
         );
     }
 }

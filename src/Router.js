@@ -4,11 +4,24 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from "react-navigation";
 import MainPage from './component/MainPage';
-import List from './component/List'
+import List from './component/List';
+import Info from './component/Info';
 
-export const Router = createAppContainer(createBottomTabNavigator({
+export const ListStack = createStackNavigator({
     MainPage: {
         screen: MainPage,
+    },
+    Info: {
+        screen: Info,
+    }
+},
+    {
+        headerMode: 'none',
+    });
+
+export const Router = createAppContainer(createBottomTabNavigator({
+    Map: {
+        screen: ListStack,
         navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
                 <IonIcons name='globe' color={tintColor} size={28} />
@@ -22,7 +35,7 @@ export const Router = createAppContainer(createBottomTabNavigator({
                 <IonIcons name='list' color={tintColor} size={25} />
             )
         }
-    }
+    },
 },
     {
         tabBarOptions: {
@@ -30,15 +43,3 @@ export const Router = createAppContainer(createBottomTabNavigator({
             inactiveTintColor: 'grey'
         }
     }));
-
-export const ListStack = createStackNavigator({
-    Router: {
-        screen: Router,
-    },
-    Router: {
-        screen: Router,
-    },
-},
-    {
-        headerMode: 'none',
-    });
