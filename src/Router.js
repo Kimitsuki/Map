@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import IonIcons from 'react-native-ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from "react-navigation";
@@ -24,7 +24,7 @@ export const Router = createAppContainer(createBottomTabNavigator({
         screen: ListStack,
         navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
-                <IonIcons name='globe' color={tintColor} size={28} />
+                <Icon name='public' color={tintColor} size={25} />
             )
         }
     },
@@ -32,7 +32,7 @@ export const Router = createAppContainer(createBottomTabNavigator({
         screen: List,
         navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
-                <IonIcons name='list' color={tintColor} size={25} />
+                <Icon name='view-list' color={tintColor} size={25} />
             )
         }
     },

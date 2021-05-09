@@ -9,7 +9,8 @@ export default class Info extends Component {
         super(props);
         this.state = {
             item: this.props.navigation.state.params.item,
-
+            distance: this.props.navigation.state.params.distance,
+            duration: this.props.navigation.state.params.duration,
         }
     }
     render() {
@@ -31,23 +32,37 @@ export default class Info extends Component {
                 </View>
                 <View style={{ marginTop: 20, paddingLeft: 10, paddingRight: 35 }}>
                     <Text style={styles.infoName}>{this.state.item.name}</Text>
-                    <Text style={styles.infoAddress}>Địa chỉ: {this.state.item.address}</Text>
-                </View>
-                <View style={{ paddingLeft: 10 }}>
-                    <Text>Giờ mở cửa: {this.state.item.open_close}</Text>
-                    <Text>Dịch vụ: {this.state.item.services}</Text>
-                </View>
-                <View style={{ marginVertical: 10 }}>
-                    <View style={{ alignSelf: 'center', borderBottomWidth: 2, width: width * 2 / 3, }}></View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Image source={require('../pictures/phone.png')} style={{ width: 25, height: 25 }} />
-                        <Text>  </Text>
-                        <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}>{this.state.item.phone}</Text>
+                    <View style={{ marginTop: 10 }}>
+                        <Text style={styles.infoAddress}>Địa chỉ: {this.state.item.address}</Text>
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Image source={require('../pictures/email.png')} style={{ width: 25, height: 25 }} />
-                        <Text>  </Text>
-                        <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { Linking.openURL('mailto:' + this.state.item.email); }}>{this.state.item.email}</Text>
+                    <View style={{ marginTop: 10 }}>
+                        <Text style={styles.infoAddress}>Giờ mở cửa: {this.state.item.open_close}</Text>
+                    </View>
+                    <View style={{ marginTop: 10 }}>
+                        <Text style={styles.infoAddress}>Dịch vụ: {this.state.item.services}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                            <Text style={{ color: 'black' }}> {this.state.distance}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Image source={require('../pictures/duration.png')} style={{ width: 25, height: 25 }} />
+                            <Text style={{ color: 'black' }}>  {this.state.duration}</Text>
+                        </View>
+                    </View>
+                    <View>
+                        <View style={{ alignSelf: 'center', borderBottomWidth: 2, width: width * 2 / 3, marginTop: 10 }}></View>
+                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                            <Image source={require('../pictures/phone.png')} style={{ width: 25, height: 25 }} />
+                            <Text>  </Text>
+                            <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}>{this.state.item.phone}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                            <Image source={require('../pictures/email.png')} style={{ width: 25, height: 25 }} />
+                            <Text>  </Text>
+                            <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { Linking.openURL('mailto:' + this.state.item.email); }}>{this.state.item.email}</Text>
+                        </View>
                     </View>
                 </View>
             </View>
