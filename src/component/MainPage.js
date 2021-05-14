@@ -585,7 +585,9 @@ export default class MainPage extends Component {
                                 {this.state.mode == 'driving' ?
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            <TouchableOpacity onPress={() => { this.setState({ directFilter: true }), this.map.fitToSuppliedMarkers(['mk1', str], { edgePadding: { top: 100, right: 150, bottom: height / 2, left: 150 }, animated: true }) }}>
+                                                <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            </TouchableOpacity>
                                             <Text style={{ color: 'black' }}> {this.state.distanceDriving}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row' }}>
@@ -598,7 +600,9 @@ export default class MainPage extends Component {
                                     :
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            <TouchableOpacity onPress={() => { this.setState({ directFilter: true }), this.map.fitToSuppliedMarkers(['mk1', str], { edgePadding: { top: 100, right: 150, bottom: height / 2, left: 150 }, animated: true }) }}>
+                                                <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            </TouchableOpacity>
                                             <Text style={{ color: 'black' }}> {this.state.distanceWalking}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row' }}>
@@ -635,7 +639,9 @@ export default class MainPage extends Component {
                                 {this.state.mode == 'driving' ?
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            <TouchableOpacity onPress={() => { this.setState({ direct: true }), this.map.fitToSuppliedMarkers(['mk1', 'mk2'], { edgePadding: { top: 100, right: 150, bottom: height / 2, left: 150 } }) }}>
+                                                <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            </TouchableOpacity>
                                             <Text style={{ color: 'black' }}> {this.state.distanceDriving}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row' }}>
@@ -648,7 +654,9 @@ export default class MainPage extends Component {
                                     :
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            <TouchableOpacity onPress={() => { this.setState({ direct: true }), this.map.fitToSuppliedMarkers(['mk1', 'mk2'], { edgePadding: { top: 100, right: 150, bottom: height / 2, left: 150 } }) }}>
+                                                <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            </TouchableOpacity>
                                             <Text style={{ color: 'black' }}> {this.state.distanceWalking}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row' }}>
