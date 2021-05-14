@@ -1,13 +1,13 @@
 export const Searching = ({ item, check }) => {
-    let result = true;
     let str = check.split(' ');
+    let name = item.name + ' ' + item.address;
     for (i = 0; i < str.length; i++) {
-        if (removeAccents(item.name + ' ' + item.address).toLowerCase().includes(str[i].toLowerCase()) || (item.name + ' ' + item.address).toLowerCase().includes(str[i].toLowerCase())) {
+        if (removeAccents(name).toLowerCase().includes(str[i].toLowerCase()) || (name).toLowerCase().includes(str[i].toLowerCase())) {
         } else {
-            result = false;
+            return false;
         }
     }
-    return result;
+    return true;
 }
 
 function removeAccents(str) {

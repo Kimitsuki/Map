@@ -7,7 +7,7 @@ import { styles } from '../StyleSheet';
 export const Item = ({ fun, item, check, currentLat, currentLon }) => {
     return (
         <View>
-            {Searching({ item: item, check: check }) == true ?
+            {Searching({ item: item, check: check }) ?
                 <TouchableOpacity
                     onPress={fun}
                     style={styles.itemBox}

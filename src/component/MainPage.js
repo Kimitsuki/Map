@@ -47,9 +47,12 @@ export default class MainPage extends Component {
             directFilter: false,
             info: false,
             key: 0,
-            distance: 0,
-            duration: 0,
+            distanceDriving: 0,
+            distanceWalking: 0,
+            driving: 0,
+            walking: 0,
             fetching: false,
+            mode: 'driving',
         }
     }
     async componentDidMount() {
@@ -64,17 +67,25 @@ export default class MainPage extends Component {
     }
     fetchDistance(lat1, lon1, lat2, lon2) {
         this.setState({ fetching: true })
-        let url = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&key=AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid';
-        fetch(url)
+        let urlDriving = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=driving&key=AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid';
+        let urlWalking = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=walking&key=AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid';
+        fetch(urlDriving)
             .then((response) => response.json())
             .then((responseJSON) => {
                 this.setState({
-                    distance: responseJSON.routes[0].legs[0].distance.text,
-                    duration: responseJSON.routes[0].legs[0].duration.text,
+                    distanceDriving: responseJSON.routes[0].legs[0].distance.text,
+                    driving: responseJSON.routes[0].legs[0].duration.text,
+                })
+            })
+        fetch(urlWalking)
+            .then((response) => response.json())
+            .then((responseJSON) => {
+                this.setState({
+                    distanceWalking: responseJSON.routes[0].legs[0].distance.text,
+                    walking: responseJSON.routes[0].legs[0].duration.text,
                     fetching: false,
                 })
             })
-        console.log(this.state.distance)
     }
     currentPosition() {
         Geolocation.getCurrentPosition(
@@ -267,7 +278,6 @@ export default class MainPage extends Component {
         this.state.item = data;
         let str = '' + key;
         if (this.state.item.types == 'gas') {
-            //console.log(this.state.item);
             return (
                 <Marker
                     key={key}
@@ -280,13 +290,12 @@ export default class MainPage extends Component {
             )
         }
         if (this.state.item.types == 'ATM') {
-            //console.log(this.state.item);
             return (
                 <Marker
                     key={key}
                     coordinate={{ latitude: this.state.item.latitude, longitude: this.state.item.longitude }}
-                    onPress={() => { this.animate(data), this.setState({ key: str, directFilter: false }) }}
-                    identifier={key}
+                    onPress={() => { this.animate(data), this.setState({ key: str, directFilter: false }), this.fetchDistance(this.state.currentPositionLatitude, this.state.currentPositionLongitude, data.latitude, data.longitude) }}
+                    identifier={str}
                 >
                     <Image source={require('../pictures/pointer_atm.png')} style={{ width: 60, height: 60 }} />
                 </Marker>
@@ -440,46 +449,6 @@ export default class MainPage extends Component {
 
         return items;
     }
-    renderInfo(item) {
-        let str = this.state.key;
-        if (this.state.info) {
-            return (
-                <View style={styles.info}>
-                    {this.state.fetching ?
-                        <View style={{ height: '100%', justifyContent: 'center' }}>
-                            <ActivityIndicator size='large' />
-                        </View>
-                        :
-                        <View>
-                            <Text style={styles.infoName}>{item.name}</Text>
-                            <Text style={styles.infoAddress}>Địa chỉ: {item.address}</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
-                                    <Text style={{ color: 'black' }}> {this.state.distance}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Image source={require('../pictures/duration.png')} style={{ width: 25, height: 25 }} />
-                                    <Text style={{ color: 'black' }}>  {this.state.duration}</Text>
-                                </View>
-                            </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15 }}>
-                                <TouchableOpacity style={styles.infoButton} onPress={() => this.props.navigation.navigate('Info', { item: item, distance: this.state.distance, duration: this.state.duration })}>
-                                    <Image source={require('../pictures/info.png')} style={{ width: 30, height: 30 }} />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.direct} onPress={() => { this.setState({ directFilter: true }), this.map.fitToSuppliedMarkers(['mk1', str], { edgePadding: { top: 0, right: 100, bottom: height / 4, left: 100 }, animated: true }) }}>
-                                    <Image source={require('../pictures/direction.png')} style={{ width: 50, height: 50 }} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>}
-                </View>
-            )
-        } else {
-            return (
-                <View></View>
-            )
-        }
-    }
     markOneItem() {
         let items = [];
         items.push(<Marker coordinate={{ latitude: this.state.latitude, longitude: this.state.longitude }}
@@ -494,9 +463,11 @@ export default class MainPage extends Component {
     render() {
         const { search } = this.state
         const onFocus = () => this.setState({ isFocus: true })
+        let str = this.state.key
+        let item = this.state.itemInfo
         if (this.state.isLoading) {
             return (
-                <View style={{ height: '100%', justifyContent: 'center' }}>
+                <View style={{ height: '100%', justifyContent: 'center', backgroundColor: 'transparent' }}>
                     <ActivityIndicator size='large' />
                 </View>
             )
@@ -526,15 +497,18 @@ export default class MainPage extends Component {
                 >
                     {this.state.location ?
                         <Marker coordinate={{ latitude: this.state.currentPositionLatitude, longitude: this.state.currentPositionLongitude }} pinColor='#5ec3f2' title='Vị trí của bạn'
-                            onPress={() => this.clear()} identifier='mk1' /> : <View />}
+                            onPress={() => this.clear()} identifier='mk1' /> : <View />
+                    }
                     {this.state.latitude != 0 && this.state.longitude != 0 ?
                         <Marker coordinate={{ latitude: this.state.latitude, longitude: this.state.longitude }}
                             onPress={() => { this.setState({ oneInfo: true }), this.getLog(), this.fetchDistance(this.state.currentPositionLatitude, this.state.currentPositionLongitude, this.state.item.latitude, this.state.item.longitude) }} identifier='mk2'
                         >
                             {this.state.item.types == 'gas' ? <Image source={require('../pictures/pointer_gas.png')} style={{ width: 60, height: 60 }} />
                                 : this.state.item.types == 'ATM' ? <Image source={require('../pictures/pointer_atm.png')} style={{ width: 60, height: 60 }} />
-                                    : <View />}
-                        </Marker> : <View />}
+                                    : <View />
+                            }
+                        </Marker> : <View />
+                    }
                     {this.state.confirm ? this.checkContains() : <View />}
                     {this.state.direct ?
                         <MapViewDirections
@@ -543,7 +517,8 @@ export default class MainPage extends Component {
                             apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
                             strokeWidth={3}
                             strokeColor='hotpink'
-                        /> : <View />}
+                        /> : <View />
+                    }
                     {this.state.directFilter ?
                         this.directFilter() : <View />
                     }
@@ -561,7 +536,8 @@ export default class MainPage extends Component {
                     {this.state.search != '' ?
                         <TouchableOpacity onPress={() => this.setState({ search: '' })}>
                             <Image source={require('../pictures/clear.png')} style={{ width: 20, height: 20 }} />
-                        </TouchableOpacity> : <View />}
+                        </TouchableOpacity> : <View />
+                    }
                     <SectionedMultiSelect
                         items={this.renderItems()}
                         IconRenderer={Icon}
@@ -592,10 +568,60 @@ export default class MainPage extends Component {
                                 data={this.state.dataSource}
                                 renderItem={({ item }) => <Item fun={() => this.updatePosition(item)} item={item} check={this.state.search} currentLat={this.state.currentPositionLatitude} currentLon={this.state.currentPositionLongitude} />}
                                 extraData={this.state.refresh}
-                            />}
-                    </ScrollView> : <View />}
+                            />
+                        }
+                    </ScrollView> : <View />
+                }
                 {this.state.info ?
-                    <View>{this.renderInfo(this.state.itemInfo)}</View> : <View />}
+                    <View style={styles.info}>
+                        {this.state.fetching ?
+                            <View style={{ height: '100%', justifyContent: 'center' }}>
+                                <ActivityIndicator size='large' />
+                            </View>
+                            :
+                            <View>
+                                <Text style={styles.infoName}>{item.name}</Text>
+                                <Text style={styles.infoAddress}>Địa chỉ: {item.address}</Text>
+                                {this.state.mode == 'driving' ?
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            <Text style={{ color: 'black' }}> {this.state.distanceDriving}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <TouchableOpacity onPress={() => this.setState({ mode: 'walking' })}>
+                                                <Image source={require('../pictures/driving.png')} style={{ width: 25, height: 25 }} />
+                                            </TouchableOpacity>
+                                            <Text style={{ color: 'black' }}>  {this.state.driving}</Text>
+                                        </View>
+                                    </View>
+                                    :
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            <Text style={{ color: 'black' }}> {this.state.distanceWalking}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <TouchableOpacity onPress={() => this.setState({ mode: 'driving' })}>
+                                                <Image source={require('../pictures/walking.png')} style={{ width: 25, height: 25 }} />
+                                            </TouchableOpacity>
+                                            <Text style={{ color: 'black' }}>  {this.state.walking}</Text>
+                                        </View>
+                                    </View>
+                                }
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15 }}>
+                                    <TouchableOpacity style={styles.infoButton} onPress={() => this.props.navigation.navigate('Info', { item: item, distance: this.state.distanceDriving, duration: this.state.driving })}>
+                                        <Image source={require('../pictures/info.png')} style={{ width: 30, height: 30 }} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.direct} onPress={() => { this.setState({ directFilter: true }), this.map.fitToSuppliedMarkers(['mk1', str], { edgePadding: { top: 100, right: 150, bottom: height / 2, left: 150 }, animated: true }) }}>
+                                        <Image source={require('../pictures/direction.png')} style={{ width: 50, height: 50 }} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        }
+                    </View> : <View />
+                }
+
                 {this.state.oneInfo ?
                     <View style={styles.info}>
                         {this.state.fetching ?
@@ -606,25 +632,43 @@ export default class MainPage extends Component {
                             <View>
                                 <Text style={styles.infoName}>{this.state.item.name}</Text>
                                 <Text style={styles.infoAddress}>Địa chỉ: {this.state.item.address}</Text>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
-                                        <Text style={{ color: 'black' }}> {this.state.distance}</Text>
+                                {this.state.mode == 'driving' ?
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            <Text style={{ color: 'black' }}> {this.state.distanceDriving}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <TouchableOpacity onPress={() => this.setState({ mode: 'walking' })}>
+                                                <Image source={require('../pictures/driving.png')} style={{ width: 25, height: 25 }} />
+                                            </TouchableOpacity>
+                                            <Text style={{ color: 'black' }}>  {this.state.driving}</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Image source={require('../pictures/duration.png')} style={{ width: 25, height: 25 }} />
-                                        <Text style={{ color: 'black' }}>  {this.state.duration}</Text>
+                                    :
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Image source={require('../pictures/distance.png')} style={{ width: 25, height: 25 }} />
+                                            <Text style={{ color: 'black' }}> {this.state.distanceWalking}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <TouchableOpacity onPress={() => this.setState({ mode: 'driving' })}>
+                                                <Image source={require('../pictures/walking.png')} style={{ width: 25, height: 25 }} />
+                                            </TouchableOpacity>
+                                            <Text style={{ color: 'black' }}>  {this.state.walking}</Text>
+                                        </View>
                                     </View>
-                                </View>
+                                }
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15 }}>
-                                    <TouchableOpacity style={styles.infoButton} onPress={() => this.props.navigation.navigate('Info', { item: this.state.item, distance: this.state.distance, duration: this.state.duration })}>
+                                    <TouchableOpacity style={styles.infoButton} onPress={() => this.props.navigation.navigate('Info', { item: this.state.item, distance: this.state.distanceDriving, duration: this.state.driving })}>
                                         <Image source={require('../pictures/info.png')} style={{ width: 30, height: 30 }} />
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.direct} onPress={() => { this.setState({ direct: true }), this.map.fitToSuppliedMarkers(['mk1', 'mk2'], { edgePadding: { top: 0, right: 100, bottom: height / 4, left: 100 }, animated: true }) }}>
+                                    <TouchableOpacity style={styles.direct} onPress={() => { this.setState({ direct: true }), this.map.fitToSuppliedMarkers(['mk1', 'mk2'], { edgePadding: { top: 100, right: 150, bottom: height / 2, left: 150 }, animated: true }) }}>
                                         <Image source={require('../pictures/direction.png')} style={{ width: 50, height: 50 }} />
                                     </TouchableOpacity>
                                 </View>
-                            </View>}
+                            </View>
+                        }
                     </View> : <View />
                 }
             </View >

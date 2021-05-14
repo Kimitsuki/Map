@@ -84,11 +84,13 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   info: {
-    marginTop: -height / 4 - 30,
-    height: height / 4,
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
     backgroundColor: 'white',
     padding: 10,
     paddingRight: 20,
+    zIndex: 1,
   },
   infoButton: {
     width: 40,
@@ -124,6 +126,7 @@ export const styles = StyleSheet.create({
   },
   map: {
     width: width,
-    height: height
+    height: height,
+    position: 'relative',
   },
 });

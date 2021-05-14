@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, Image, StatusBar, TouchableOpacity, Linking } from 'react-native';
-import { styles } from '../StyleSheet';
+import { Text, Dimensions, View, Image, StatusBar, Linking } from 'react-native';
+import { styles } from '../StyleSheet'
 
 let { height, width } = Dimensions.get('window');
 
@@ -14,6 +14,13 @@ export default class Info extends Component {
         }
     }
     render() {
+        const openURL = (email) => {
+            if (email.includes('http')) {
+                Linking.openURL(email)
+            } else {
+                Linking.openURL('mailto:' + email)
+            }
+        }
         return (
             <View>
                 <StatusBar backgroundColor='transparent' barStyle='dark-content' translucent={true} />
@@ -61,7 +68,7 @@ export default class Info extends Component {
                         <View style={{ flexDirection: 'row', marginTop: 10 }}>
                             <Image source={require('../pictures/email.png')} style={{ width: 25, height: 25 }} />
                             <Text>  </Text>
-                            <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { Linking.openURL('mailto:' + this.state.item.email); }}>{this.state.item.email}</Text>
+                            <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { openURL(this.state.item.email) }}>{this.state.item.email}</Text>
                         </View>
                     </View>
                 </View>

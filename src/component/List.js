@@ -28,13 +28,6 @@ export default class List extends Component {
         })
     }
     render() {
-        if (this.state.isLoading) {
-            return (
-                <View style={{ height: '100%', justifyContent: 'center' }}>
-                    <ActivityIndicator size='large' />
-                </View>
-            )
-        }
         return (
             <View>
                 <StatusBar backgroundColor='transparent' translucent={true} />
