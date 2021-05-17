@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Image, StatusBar, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, Keyboard } from 'react-native';
+import { Text, TextInput, View, Image, StatusBar, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, Keyboard, NetInfo } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { styles } from '../StyleSheet';
@@ -56,14 +56,31 @@ export default class MainPage extends Component {
         }
     }
     async componentDidMount() {
-        this.currentPosition();
-        this.getLog();
-        FetchData.data().then(res => {
-            this.setState({
-                isLoading: false,
-                dataSource: res,
+         {
+            this.currentPosition();
+            this.getLog();
+            FetchData.data().then((res) => {
+                this.setState({
+                    isLoading: false,
+                    dataSource: res,
+                })
             })
-        })
+        }
+        {
+            if (Platform.OS === "android") {
+                NetInfo.isConnected.fetch().then(isConnected => {
+                    if (isConnected == false) {
+                        Alert.alert("You are offline!");
+                    }
+                });
+            } else {
+                // For iOS devices
+                NetInfo.isConnected.addEventListener(
+                    "connectionChange",
+                    this.handleFirstConnectivityChange
+                );
+            }
+        }
     }
     fetchDistance(lat1, lon1, lat2, lon2) {
         this.setState({ fetching: true })
@@ -90,7 +107,7 @@ export default class MainPage extends Component {
     currentPosition() {
         Geolocation.getCurrentPosition(
             (info) => this.getPosition(info.coords.latitude, info.coords.longitude),
-            (error) => console.log(error),
+            (error) => Alert.alert('Bạn cần bật vị trí để sử dụng ứng dụng này'),
             { enableHighAccuracy: false, timeout: 50000 }
         );
     }
