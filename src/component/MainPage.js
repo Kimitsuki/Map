@@ -15,7 +15,7 @@ import { History } from '../function/RenderHistory';
 
 let { height, width } = Dimensions.get('window');
 
-const serviceGas = ['RON 95', 'RON 92', 'Diesel', 'Dầu nhờn', 'Bảo hiểm', 'Sơn', 'Nước giặt', 'Thay dầu', 'Nhà vệ sinh'];
+const serviceGas = ['Petrolimex', 'Mipec', 'Redriver', 'Ron95-III', 'Ron95-IV', 'E5 Ron92-II', 'Do 0.001S-V', 'DO 0,05S-V', 'Dầu nhờn', 'Bảo hiểm', 'Sơn', 'Mazut', 'Nước giặt', 'Thay dầu', 'Nhà vệ sinh'];
 const serviceATM = ['Agribank', 'BIDV', 'Vietcombank', 'Vietinbank', 'TP', 'MB', 'VP', 'VIB', 'ACB', 'MSB', 'PG', 'SHB', 'Sacombank', 'AB', 'SeABank', 'SaiGonBank', 'PublicBank', 'HSBC', 'HDBank', 'Eximbank', 'PVCombank', 'OceanBank', 'VietBank', 'VietABank', 'GPBank', 'Techcombank', 'Nộp tiền', 'Rút tiền', 'Vấn tin số dư', 'Chuyển tiền', 'Mở tài khoản thanh toán', 'Phát hành thẻ lấy ngay'];
 const openTime = ['05:00 - 24:00', '05:30 - 22:00', '06:00 - 22:00', '06:00 - 22:30', '08:00 - 22:00', '24/24'];
 
