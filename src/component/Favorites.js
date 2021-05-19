@@ -67,15 +67,20 @@ export default class Favorites extends Component {
                         renderItem={({ item }) => {
                             return (
                                 <View style={favoritesStyle.bodyFavorites}>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <Text style={styles.infoName}>{item.name}</Text>
-                                        <Text style={styles.infoAddress}>Địa chỉ: {item.address}</Text>
-                                        <Text style={styles.infoAddress}>Giờ mở cửa: {item.open_close}</Text>
-                                        <Text style={styles.infoAddress}>Dịch vụ: {item.services}</Text>
-                                        <TouchableOpacity style={styles.infoButton} onPress={() => { this.fetchDistance(this.state.currentPositionLatitude, this.state.currentPositionLongitude, item.latitude, item.longitude, item) }}>
-                                            <Image source={require('../pictures/info.png')} style={{ width: 30, height: 30 }} />
-                                        </TouchableOpacity>
-                                    </View>
+                                    <TouchableOpacity onPress={() => Linking.openURL('google.navigation:q='+item.latitude+'+'+item.longitude)}>
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <Text style={styles.infoName}>{item.name}</Text>
+                                            <Text style={styles.infoAddress}>Địa chỉ: {item.address}</Text>
+                                            <Text style={styles.infoAddress}>Giờ mở cửa: {item.open_close}</Text>
+                                            <Text style={styles.infoAddress}>Dịch vụ: {item.services}</Text>
+                                            <TouchableOpacity style={styles.infoButton} onPress={() => { this.fetchDistance(this.state.currentPositionLatitude, this.state.currentPositionLongitude, item.latitude, item.longitude, item) }}>
+                                                <Image source={require('../pictures/info.png')} style={{ width: 30, height: 30 }} />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => { this.removeToFavorites(item) }}>
+                                                <Image source={require('../pictures/heart1.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </TouchableOpacity>
                                 </View>
                             )
                         }}
