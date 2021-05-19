@@ -6,7 +6,7 @@ import { createAppContainer } from "react-navigation";
 import MainPage from './component/MainPage';
 import List from './component/List';
 import Info from './component/Info';
-import Favorites from './component/Favourite'
+import Favorites from './component/Favorites'
 
 export const ListStack_1 = createStackNavigator({
     MainPage: {
