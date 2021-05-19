@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Image, StatusBar, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, Keyboard, NetInfo } from 'react-native';
+import { Text, TextInput, View, Image, StatusBar, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, Keyboard, NetInfo, Alert, Platform, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { styles } from '../StyleSheet';
@@ -12,6 +12,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { FetchData } from '../function/FetchData';
 import { History } from '../function/RenderHistory';
+import { getDistance } from 'geolib';
+import { NavigationEvents } from 'react-navigation';
 
 let { height, width } = Dimensions.get('window');
 
@@ -53,10 +55,12 @@ export default class MainPage extends Component {
             walking: 0,
             fetching: false,
             mode: 'driving',
+            favorites: []
         }
     }
+
     async componentDidMount() {
-         {
+        {
             this.currentPosition();
             this.getLog();
             FetchData.data().then((res) => {
@@ -81,7 +85,11 @@ export default class MainPage extends Component {
                 );
             }
         }
+        {
+            this.updateList()
+        }
     }
+
     fetchDistance(lat1, lon1, lat2, lon2) {
         this.setState({ fetching: true })
         let urlDriving = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=driving&key=AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid';
@@ -104,6 +112,7 @@ export default class MainPage extends Component {
                 })
             })
     }
+
     currentPosition() {
         Geolocation.getCurrentPosition(
             (info) => this.getPosition(info.coords.latitude, info.coords.longitude),
@@ -111,6 +120,7 @@ export default class MainPage extends Component {
             { enableHighAccuracy: false, timeout: 50000 }
         );
     }
+
     getPosition(latitude, longitude) {
         this.setState({
             currentPositionLatitude: latitude,
@@ -119,6 +129,7 @@ export default class MainPage extends Component {
             regionLongitude: longitude
         })
     }
+
     updatePosition(item) {
         SearchLog({ name: item.name })
         this.setState({
@@ -130,12 +141,14 @@ export default class MainPage extends Component {
         })
         this.clearAll();
     }
+
     updateSearch = (search) => {
         this.setState({
             search,
             refresh: !this.state.refresh
         })
     }
+
     getLog() {
         GetLog.log().then(res => {
             this.setState({
@@ -143,6 +156,7 @@ export default class MainPage extends Component {
             })
         })
     }
+
     clear() {
         this.setState({
             isFocus: false,
@@ -152,6 +166,7 @@ export default class MainPage extends Component {
         this.getLog();
         Keyboard.dismiss();
     }
+
     clearAll() {
         this.setState({
             confirm: false,
@@ -165,9 +180,11 @@ export default class MainPage extends Component {
         this.getLog();
         Keyboard.dismiss();
     }
+
     onSelectedItemsChange = (selectedItems) => {
         this.setState({ selectedItems });
     }
+
     onSelectedConfirm = () => {
         this.setState({
             confirm: true,
@@ -178,6 +195,7 @@ export default class MainPage extends Component {
             direct: false
         })
     }
+
     getTypes() {
         let names = [];
 
@@ -201,18 +219,19 @@ export default class MainPage extends Component {
 
         return names;
     }
+
     result(types) {
         let result = [];
 
         if (types == serviceGas) {
             result.push({
                 id: 'Gần tôi gas',
-                name: 'Gần tôi'
+                name: 'Gần nhất'
             })
         } else if (types == serviceATM) {
             result.push({
                 id: 'Gần tôi ATM',
-                name: 'Gần tôi'
+                name: 'Gần nhất'
             })
         }
 
@@ -225,6 +244,7 @@ export default class MainPage extends Component {
 
         return result;
     }
+
     resultOpenTime() {
         let result = [];
 
@@ -237,6 +257,7 @@ export default class MainPage extends Component {
 
         return result;
     }
+
     renderItems() {
         let items = [];
         for (let i = 0; i < this.getTypes().length; i++) {
@@ -267,6 +288,7 @@ export default class MainPage extends Component {
 
         return items;
     }
+
     directFilter() {
         return (
             <MapViewDirections
@@ -278,6 +300,7 @@ export default class MainPage extends Component {
             />
         )
     }
+
     animate(data) {
 
         this.state.item = data;
@@ -291,6 +314,7 @@ export default class MainPage extends Component {
 
         })
     }
+
     markerFilter(data, key) {
         this.state.item = data;
         let str = '' + key;
@@ -319,6 +343,7 @@ export default class MainPage extends Component {
             )
         }
     }
+
     removeItem(arr, value) {
         var index = arr.indexOf(value);
         if (index > -1) {
@@ -326,6 +351,7 @@ export default class MainPage extends Component {
         }
         return arr;
     }
+
     getDistance(lat1, lon1, lat2, lon2) {
         var dis = getDistance(
             { latitude: lat1, longitude: lon1 },
@@ -334,8 +360,11 @@ export default class MainPage extends Component {
 
         var distance = dis / 1000;
 
+        console.log("distance "+distance)
+
         return distance;
     }
+
     checkOpenClose() {
         for (let i = 0; i < openTime.length; i++) {
             if (this.state.selectedItems.includes(openTime[i])) {
@@ -356,6 +385,7 @@ export default class MainPage extends Component {
         }
         return false;
     }
+
     getOnceOpenClose() {
         let count = 0;
         let result = null;
@@ -370,6 +400,7 @@ export default class MainPage extends Component {
         }
         return null;
     }
+
     checkContains() {
         let items = [];
         let dis = [];
@@ -455,7 +486,6 @@ export default class MainPage extends Component {
             }
         }
 
-
         index = dis.indexOf(Math.min.apply(Math, dis));
         if (check == 1) {
             items.push(this.markerFilter(dataCoor[index], "keyATM"));
@@ -466,6 +496,7 @@ export default class MainPage extends Component {
 
         return items;
     }
+
     markOneItem() {
         let items = [];
         items.push(<Marker coordinate={{ latitude: this.state.latitude, longitude: this.state.longitude }}
@@ -477,6 +508,62 @@ export default class MainPage extends Component {
         </Marker>)
         return items;
     }
+
+    renderHeart(item) {
+        //item: object
+        if (!this.state.favorites.some((x) => x.id === item.id)) {
+            return (
+                <Image source={require('../pictures/heart.png')} />
+            )
+        } else {
+            return (
+                <Image source={require('../pictures/heart1.png')} />
+            )
+        }
+    }
+
+    async updateList() {
+        const response = await AsyncStorage.getItem('favorites');
+        const listOfLikes = await JSON.parse(response) || [];
+        this.setState({
+            favorites: listOfLikes
+        });
+        console.log("MainPage " + JSON.stringify(this.state.favorites));
+    }
+
+    async addToFavorites(item) {
+        const listOfHouses = [...this.state.favorites, item];
+
+        await AsyncStorage.setItem('favorites',
+            JSON.stringify(listOfHouses));
+        this.updateList();
+    }
+
+    async removeToFavorites(item) {
+        const value = this.state.favorites.filter(x => x.id != item.id);
+
+        await AsyncStorage.setItem('favorites',
+            JSON.stringify(value));
+        this.updateList();
+    }
+
+    onPressHeartButton(item) {
+        if (!this.state.favorites.some((x) => x.id === item.id)) {
+            this.addToFavorites(item);
+        } else {
+            this.removeToFavorites(item);
+        }
+    }
+
+    onFocus = async () => {
+        const response = await AsyncStorage.getItem('favorites');
+        const listOfLikes = await JSON.parse(response) || [];
+        this.setState({
+            favorites: listOfLikes,
+        });
+        console.log("Favorites " + JSON.stringify(this.state.favorites))
+    }
+
     render() {
         const { search } = this.state
         const onFocus = () => this.setState({ isFocus: true })
@@ -491,6 +578,9 @@ export default class MainPage extends Component {
         }
         return (
             <View style={styles.container}>
+                <NavigationEvents
+                    onWillFocus={this.onFocus} />
+
                 <StatusBar backgroundColor='transparent' barStyle='dark-content' translucent={true} />
                 <MapView
                     provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -638,6 +728,9 @@ export default class MainPage extends Component {
                                         <Image source={require('../pictures/direction.png')} style={{ width: 50, height: 50 }} />
                                     </TouchableOpacity>
                                 </View>
+                                <TouchableWithoutFeedback onPress={this.onPressHeartButton.bind(this, item)}>
+                                    {this.renderHeart(item)}
+                                </TouchableWithoutFeedback>
                             </View>
                         }
                     </View> : <View />
@@ -692,6 +785,9 @@ export default class MainPage extends Component {
                                         <Image source={require('../pictures/direction.png')} style={{ width: 50, height: 50 }} />
                                     </TouchableOpacity>
                                 </View>
+                                <TouchableWithoutFeedback onPress={this.onPressHeartButton.bind(this, this.state.item)}>
+                                    {this.renderHeart(this.state.item)}
+                                </TouchableWithoutFeedback>
                             </View>
                         }
                     </View> : <View />
