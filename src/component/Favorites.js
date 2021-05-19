@@ -53,6 +53,18 @@ export default class Favorites extends Component {
 
         console.log(this.state.distance)
     }
+    
+      async removeToFavorites(item) {
+        const value = this.state.favorites.filter(x => x.id != item.id);
+
+        await AsyncStorage.setItem('favorites',
+            JSON.stringify(value));
+
+        this.setState({
+            favorites: value,
+        });
+    }
+    
     render() {
         return (
             <View style={{ flex: 1 }}>
