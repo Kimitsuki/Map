@@ -37,16 +37,19 @@ export default class Info extends Component {
                             </View>
                             : <View />}
                 </View>
-                <View style={{ marginTop: 20, paddingLeft: 10, paddingRight: 35 }}>
-                    <Text style={styles.infoName}>{this.state.item.name}</Text>
-                    <View style={{ marginTop: 10 }}>
-                        <Text style={styles.infoAddress}>Địa chỉ: {this.state.item.address}</Text>
+                <View style={{ marginTop: 20, paddingLeft: 10, paddingRight: 55 }}>
+                    <Text style={styles.bigInfoName}>{this.state.item.name}</Text>
+                    <View style={{ marginTop: 10, flexDirection: 'row' }}>
+                        <Text style={styles.bigBoldInfoAddress}>Địa chỉ:</Text>
+                        <Text style={styles.bigInfoAddress}> {this.state.item.address}</Text>
                     </View>
-                    <View style={{ marginTop: 10 }}>
-                        <Text style={styles.infoAddress}>Giờ mở cửa: {this.state.item.open_close}</Text>
+                    <View style={{ marginTop: 10, flexDirection: 'row' }}>
+                        <Text style={styles.bigBoldInfoAddress}>Giờ mở cửa:</Text>
+                        <Text style={styles.bigInfoAddress}> {this.state.item.open_close}</Text>
                     </View>
-                    <View style={{ marginTop: 10 }}>
-                        <Text style={styles.infoAddress}>Dịch vụ: {this.state.item.services}</Text>
+                    <View style={{ marginTop: 10, flexDirection: 'row' }}>
+                        <Text style={styles.bigBoldInfoAddress}>Dịch vụ:</Text>
+                        <Text style={styles.bigInfoAddress}> {this.state.item.services}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
                         <View style={{ flexDirection: 'row' }}>

@@ -197,7 +197,7 @@ export default class MapList extends Component {
                                             <Image source={require('../pictures/atm.png')} style={{ width: 50, height: 70 }} />
                                         </View>
                                     }
-                                    <View style={{ padding: 5, width: '100%' }}>
+                                    <View style={{ padding: 5, flex: 7 }}>
                                         <Text style={styles.infoName}>{this.state.item.name}</Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <View style={{ paddingTop: 5, width: 12, alignItems: 'center' }}>
@@ -205,6 +205,14 @@ export default class MapList extends Component {
                                             </View>
                                             <Text style={styles.infoAddress}> {this.state.item.address}</Text>
                                         </View>
+                                    </View>
+                                    <View>
+                                        <TouchableOpacity style={{ flex: 1 }} onPress={this.onPressHeartButton.bind(this, this.state.item)}>
+                                            {this.renderHeart(this.state.item)}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => Linking.openURL('google.navigation:q=' + this.state.item.latitude + '+' + this.state.item.longitude)}>
+                                            <Image source={require('../pictures/gps.png')} style={{ width: 30, height: 30 }} />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 10 }}>
@@ -237,9 +245,6 @@ export default class MapList extends Component {
                                     }
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableOpacity onPress={this.onPressHeartButton.bind(this, this.state.item)}>
-                                        {this.renderHeart(this.state.item)}
-                                    </TouchableOpacity>
                                     <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Info', { item: this.state.item, distance: this.state.distanceDriving, duration: this.state.driving })}>
                                         <Text style={{ color: 'black' }}>Chi tiết</Text>
                                     </TouchableOpacity>

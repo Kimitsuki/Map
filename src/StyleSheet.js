@@ -100,6 +100,20 @@ export const styles = StyleSheet.create({
     color: 'black',
     paddingRight: 10,
   },
+  bigInfoName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#5ec3f2',
+  },
+  bigInfoAddress: {
+    fontSize: 14,
+    color: 'black',
+  },
+  bigBoldInfoAddress: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'black',
+  },
   list: {
     height: height - 255,
   },
