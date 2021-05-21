@@ -8,7 +8,13 @@ export const GetLog = {
         })
         await RNFS.readFile(path).then((res) => {
             str = res.split('\n');
-            result = str;
+            if (str[str.length - 1] == '') {
+                for (i = 0; i < str.length - 1; i++) {
+                    result[i] = str[i];
+                }
+            } else {
+                result = str;
+            }
         })
         return result;
     }

@@ -45,13 +45,10 @@ export const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: 10
   },
-  list: {
-    height: height,
-    marginTop: 25,
-  },
   listSearch: {
     position: 'absolute',
     marginTop: 80,
+    maxHeight: height / 2,
   },
   name: {
     fontSize: 16,
@@ -61,64 +58,64 @@ export const styles = StyleSheet.create({
   address: {
     fontSize: 12
   },
-  circle: {
-    marginTop: 35,
-    marginLeft: 20,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1.5,
-    borderColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   circleBlue: {
-    marginTop: 35,
-    marginLeft: 20,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1.5,
+    width: 25,
+    height: 25,
+    borderRadius: 12.5,
+    borderWidth: 2,
     borderColor: '#5ec3f2',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  circle: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
+    backgroundColor: '#5ec3f2',
   },
   info: {
     position: 'absolute',
     width: '100%',
     bottom: 0,
-    backgroundColor: 'white',
-    padding: 10,
-    paddingRight: 20,
-    zIndex: 1,
+    backgroundColor: 'transparent',
+    padding: 5,
   },
-  infoButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginLeft: 10,
+  button: {
+    width: 100,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: '#5ec3f2',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
   infoName: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#5ec3f2',
+    paddingRight: 10,
   },
   infoAddress: {
-    fontSize: 14,
+    fontSize: 12,
     color: 'black',
+    paddingRight: 10,
   },
-  direct: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 1,
+  list: {
+    height: height - 255,
+  },
+  listFavorites: {
+    height: height - 130,
+  },
+  headerBackground: {
+    width: '100%',
+    height: 80,
     backgroundColor: '#5ec3f2',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  bigWhite: {
+    color: 'white',
+    fontSize: 22,
+    marginTop: 30,
+    marginLeft: 20
   },
   container: {
     ...StyleSheet.absoluteFillObject,

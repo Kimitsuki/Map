@@ -27,7 +27,6 @@ export const SearchLog = ({ name }) => {
                 history = history + '\n' + str[i];
             }
         }
-        console.log(history)
         RNFS.writeFile(path, history)
             .catch((err) => {
                 console.log(err.message);
