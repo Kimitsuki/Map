@@ -237,9 +237,14 @@ export default class List extends Component {
                                                                 <Text style={styles.infoAddress}> {item.services}</Text>
                                                             </View>
                                                         </View>
-                                                        <TouchableOpacity style={{ flex: 1 }} onPress={this.onPressHeartButton.bind(this, item)}>
-                                                            {this.renderHeart(item)}
-                                                        </TouchableOpacity>
+                                                        <View>
+                                                            <TouchableOpacity style={{ flex: 1 }} onPress={this.onPressHeartButton.bind(this, item)}>
+                                                                {this.renderHeart(item)}
+                                                            </TouchableOpacity>
+                                                            <TouchableOpacity onPress={() => Linking.openURL('google.navigation:q=' + item.latitude + '+' + item.longitude)}>
+                                                                <Image source={require('../pictures/gps.png')} style={{ width: 30, height: 30 }} />
+                                                            </TouchableOpacity>
+                                                        </View>
                                                     </View>
                                                 </TouchableOpacity >
                                             </View>
