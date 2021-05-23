@@ -14,6 +14,7 @@ import { FetchData } from '../function/FetchData';
 import { History } from '../function/RenderHistory';
 import { NavigationEvents } from 'react-navigation';
 import { getDistance } from 'geolib';
+import { ToHistory } from '../function/History';
 
 let { height, width } = Dimensions.get('window');
 
@@ -107,7 +108,7 @@ export default class MainPage extends Component {
     currentPosition() {
         Geolocation.getCurrentPosition(
             (info) => this.getPosition(info.coords.latitude, info.coords.longitude),
-            (error) => console.log(error),
+            (error) => Alert.alert('Bạn cần bật vị trí để sử dụng ứng dụng này'),
             { enableHighAccuracy: false, timeout: 50000 }
         );
     }
@@ -274,7 +275,7 @@ export default class MainPage extends Component {
                 destination={{ latitude: this.state.itemInfo.latitude, longitude: this.state.itemInfo.longitude }}
                 apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
                 strokeWidth={3}
-                strokeColor='red'
+                strokeColor='#c84bc8'
             />
         )
     }
@@ -575,7 +576,7 @@ export default class MainPage extends Component {
                             destination={{ latitude: this.state.item.latitude, longitude: this.state.item.longitude }}
                             apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
                             strokeWidth={3}
-                            strokeColor='hotpink'
+                            strokeColor='#c84bc8'
                         /> : <View />
                     }
                     {this.state.directFilter ?
@@ -618,7 +619,7 @@ export default class MainPage extends Component {
                             <FlatList
                                 keyboardShouldPersistTaps='handled'
                                 data={this.state.history}
-                                renderItem={({ item }) => <History fun={() => this.updateSearch(item)} item={item} />}
+                                renderItem={({ item }) => <History fun={() => this.updatePosition(ToHistory({ item: item, dataSource: this.state.dataSource }))} item={item} />}
                                 extraData={this.state.refresh}
                             />
                             :

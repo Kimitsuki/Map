@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, StatusBar, TouchableOpacity, FlatList, Image, AsyncStorage } from 'react-native';
+import { Text, Dimensions, View, ScrollView, Linking, TouchableOpacity, FlatList, Image, AsyncStorage } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { styles } from '../StyleSheet';
 import { Filter } from '../function/Filter';

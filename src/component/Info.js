@@ -22,7 +22,7 @@ export default class Info extends Component {
             }
         }
         return (
-            <View>
+            <View style={{ height: '100%', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor='transparent' barStyle='dark-content' translucent={true} />
                 <View style={{ alignSelf: 'center' }}>
                     {this.state.item.types == 'gas' ?

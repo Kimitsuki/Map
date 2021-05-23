@@ -176,7 +176,7 @@ export default class MapList extends Component {
                             destination={{ latitude: this.state.item.latitude, longitude: this.state.item.longitude }}
                             apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
                             strokeWidth={3}
-                            strokeColor='hotpink'
+                            strokeColor='#c84bc8'
                         />
                         : <View />
                     }

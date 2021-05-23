@@ -9,11 +9,9 @@ export const History = ({ fun, item }) => {
                 onPress={fun}
                 style={styles.historyBox}
             >
+                <Image source={require('../pictures/history.png')} style={{ width: 20, height: 20 }} />
                 <View>
-                    <Image source={require('../pictures/history.png')} style={{ width: 20, height: 20 }} />
-                </View>
-                <View>
-                    <Text style={styles.name}>  {item}</Text>
+                    <Text style={styles.name}> {item}</Text>
                 </View>
             </TouchableOpacity>
         </View>
