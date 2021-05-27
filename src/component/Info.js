@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, Image, StatusBar, Linking } from 'react-native';
+import { Text, Dimensions, View, Image, StatusBar, Linking, TouchableOpacity } from 'react-native';
 import { styles } from '../StyleSheet'
 
 let { height, width } = Dimensions.get('window');
@@ -24,14 +24,20 @@ export default class Info extends Component {
         return (
             <View style={{ height: '100%', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor='transparent' barStyle='dark-content' translucent={true} />
+                <View style={styles.headerBackground}>
+                    <TouchableOpacity style={{ marginTop: 30, marginLeft: 20 }} onPress={() => this.props.navigation.goBack()}>
+                        <Image source={require('../pictures/back_white.png')} style={{ width: 15, height: 30 }} />
+                    </TouchableOpacity>
+                    <Text style={styles.bigWhite}>Chi tiết</Text>
+                </View>
                 <View style={{ alignSelf: 'center' }}>
                     {this.state.item.types == 'gas' ?
-                        <View style={{ marginTop: 30, flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row' }}>
                             <Image source={require('../pictures/gas_info_1.jpg')} style={{ width: width * 2 / 3, height: 150 }} />
                             <Image source={require('../pictures/gas_info_2.jpg')} style={{ width: width / 3, height: 150 }} />
                         </View>
                         : this.state.item.types == 'ATM' ?
-                            <View style={{ marginTop: 30, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row' }}>
                                 <Image source={require('../pictures/atm_info_1.jpg')} style={{ width: width / 3, height: 150 }} />
                                 <Image source={require('../pictures/atm_info_2.jpg')} style={{ width: width * 2 / 3, height: 150 }} />
                             </View>
@@ -66,12 +72,12 @@ export default class Info extends Component {
                         <View style={{ flexDirection: 'row', marginTop: 10 }}>
                             <Image source={require('../pictures/phone.png')} style={{ width: 25, height: 25 }} />
                             <Text>  </Text>
-                            <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}>{this.state.item.phone}</Text>
+                            <Text style={{ alignSelf: 'center', color: 'black', textDecorationLine: 'underline' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}>{this.state.item.phone}</Text>
                         </View>
                         <View style={{ flexDirection: 'row', marginTop: 10 }}>
                             <Image source={require('../pictures/email.png')} style={{ width: 25, height: 25 }} />
                             <Text>  </Text>
-                            <Text style={{ alignSelf: 'center', color: '#5ec3f2' }} onPress={() => { openURL(this.state.item.email) }}>{this.state.item.email}</Text>
+                            <Text style={{ alignSelf: 'center', color: 'black', textDecorationLine: 'underline' }} onPress={() => { openURL(this.state.item.email) }}>{this.state.item.email}</Text>
                         </View>
                     </View>
                 </View>

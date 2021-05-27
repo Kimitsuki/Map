@@ -41,9 +41,10 @@ export default class MapList extends Component {
         })
     }
     fetchDistance(lat1, lon1, lat2, lon2) {
+        let key = 'AIzaSyCOoszPDiUzYkmLt13L9Bxui0dUk7GAWvk';
         this.setState({ fetching: true })
-        let urlDriving = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=driving&key=AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid';
-        let urlWalking = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=walking&key=AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid';
+        let urlDriving = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=driving&key=' + key;
+        let urlWalking = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=walking&key=' + key;
         fetch(urlDriving)
             .then((response) => response.json())
             .then((responseJSON) => {
@@ -164,9 +165,9 @@ export default class MapList extends Component {
                     <Marker coordinate={{ latitude: this.state.item.latitude, longitude: this.state.item.longitude }}
                         onPress={() => { this.setState({ oneInfo: true }), this.fetchDistance(this.state.currentPositionLatitude, this.state.currentPositionLongitude, this.state.item.latitude, this.state.item.longitude) }} identifier='mk2'
                     >
-                        {this.state.item.types == 'gas' ? <Image source={require('../pictures/pointer_gas.png')} style={{ width: 60, height: 60 }} />
+                        {this.state.item.types == 'gas' ? <Image source={require('../pictures/pointer_gas.png')} style={{ width: 40, height: 50 }} />
                             :
-                            this.state.item.types == 'ATM' ? <Image source={require('../pictures/pointer_atm.png')} style={{ width: 60, height: 60 }} />
+                            this.state.item.types == 'ATM' ? <Image source={require('../pictures/pointer_atm.png')} style={{ width: 40, height: 50 }} />
                                 : <View />
                         }
                     </Marker>
@@ -174,13 +175,16 @@ export default class MapList extends Component {
                         <MapViewDirections
                             origin={{ latitude: this.state.currentPositionLatitude, longitude: this.state.currentPositionLongitude }}
                             destination={{ latitude: this.state.item.latitude, longitude: this.state.item.longitude }}
-                            apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
+                            apikey={'AIzaSyCOoszPDiUzYkmLt13L9Bxui0dUk7GAWvk'}
                             strokeWidth={3}
                             strokeColor='#c84bc8'
                         />
                         : <View />
                     }
                 </MapView>
+                <TouchableOpacity style={{ position: 'absolute', width: 15, height: 30, marginTop: 30, marginLeft: 20 }} onPress={() => this.props.navigation.goBack()}>
+                    <Image source={require('../pictures/back_black.png')} style={{ width: 15, height: 30 }} />
+                </TouchableOpacity>
                 {this.state.oneInfo ?
                     <View style={styles.info}>
                         {this.state.fetching ?
@@ -188,7 +192,7 @@ export default class MapList extends Component {
                                 <ActivityIndicator size='large' />
                             </View>
                             :
-                            <View style={{ padding: 5, borderColor: '#5ec3f2', borderWidth: 1, borderRadius: 5, backgroundColor: 'white', justifyContent: 'space-around' }}>
+                            <View style={{ minHeight: height / 4, padding: 5, borderColor: '#5ec3f2', borderWidth: 1, borderRadius: 5, backgroundColor: 'white', justifyContent: 'space-around' }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     {this.state.item.types == 'gas' ?
                                         <Image source={require('../pictures/gas.png')} style={{ width: 70, height: 70 }} />
@@ -226,7 +230,8 @@ export default class MapList extends Component {
                                         <TouchableOpacity onPress={() => this.setState({ mode: 'walking' })}>
                                             <Image source={require('../pictures/phone.png')} style={{ width: 23, height: 23 }} />
                                         </TouchableOpacity>
-                                        <Text style={{ color: '#5ec3f2' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}> {this.state.item.phone}</Text>
+                                        <Text> </Text>
+                                        <Text style={{ color: 'black', textDecorationLine: 'underline' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}>{this.state.item.phone}</Text>
                                     </View>
                                     {this.state.mode == 'driving' ?
                                         <View style={{ flexDirection: 'row' }}>

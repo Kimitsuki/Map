@@ -84,9 +84,10 @@ export default class MainPage extends Component {
         this.updateList();
     }
     fetchDistance(lat1, lon1, lat2, lon2) {
+        let key = 'AIzaSyDO2cMTkAJG0fXbLCCKKiEyBPPGiItEgF4';
         this.setState({ fetching: true })
-        let urlDriving = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=driving&key=AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid';
-        let urlWalking = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=walking&key=AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid';
+        let urlDriving = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=driving&key=' + key;
+        let urlWalking = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=walking&key=' + key;
         fetch(urlDriving)
             .then((response) => response.json())
             .then((responseJSON) => {
@@ -273,7 +274,7 @@ export default class MainPage extends Component {
             <MapViewDirections
                 origin={{ latitude: this.state.currentPositionLatitude, longitude: this.state.currentPositionLongitude }}
                 destination={{ latitude: this.state.itemInfo.latitude, longitude: this.state.itemInfo.longitude }}
-                apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
+                apikey={'AIzaSyDO2cMTkAJG0fXbLCCKKiEyBPPGiItEgF4'}
                 strokeWidth={3}
                 strokeColor='#c84bc8'
             />
@@ -300,7 +301,7 @@ export default class MainPage extends Component {
                     onPress={() => { this.animate(data), this.setState({ key: str, directFilter: false }), this.fetchDistance(this.state.currentPositionLatitude, this.state.currentPositionLongitude, data.latitude, data.longitude) }}
                     identifier={str}
                 >
-                    <Image source={require('../pictures/pointer_gas.png')} style={{ width: 60, height: 60 }} />
+                    <Image source={require('../pictures/pointer_gas.png')} style={{ width: 40, height: 50 }} />
                 </Marker>
             )
         }
@@ -312,7 +313,7 @@ export default class MainPage extends Component {
                     onPress={() => { this.animate(data), this.setState({ key: str, directFilter: false }), this.fetchDistance(this.state.currentPositionLatitude, this.state.currentPositionLongitude, data.latitude, data.longitude) }}
                     identifier={str}
                 >
-                    <Image source={require('../pictures/pointer_atm.png')} style={{ width: 60, height: 60 }} />
+                    <Image source={require('../pictures/pointer_atm.png')} style={{ width: 40, height: 50 }} />
                 </Marker>
             )
         }
@@ -557,14 +558,14 @@ export default class MainPage extends Component {
                 >
                     {this.state.location ?
                         <Marker coordinate={{ latitude: this.state.currentPositionLatitude, longitude: this.state.currentPositionLongitude }} pinColor='#5ec3f2' title='Vị trí của bạn'
-                            onPress={() => { this.clear(), console.log(this.state.item) }} identifier='mk1' /> : <View />
+                            onPress={() => { this.clear(), this.currentPosition() }} identifier='mk1' /> : <View />
                     }
                     {this.state.latitude != 0 && this.state.longitude != 0 ?
                         <Marker coordinate={{ latitude: this.state.latitude, longitude: this.state.longitude }}
                             onPress={() => { this.setState({ oneInfo: true }), this.getLog(), this.fetchDistance(this.state.currentPositionLatitude, this.state.currentPositionLongitude, this.state.item.latitude, this.state.item.longitude) }} identifier='mk2'
                         >
-                            {this.state.item.types == 'gas' ? <Image source={require('../pictures/pointer_gas.png')} style={{ width: 60, height: 60 }} />
-                                : this.state.item.types == 'ATM' ? <Image source={require('../pictures/pointer_atm.png')} style={{ width: 60, height: 60 }} />
+                            {this.state.item.types == 'gas' ? <Image source={require('../pictures/pointer_gas.png')} style={{ width: 40, height: 50 }} />
+                                : this.state.item.types == 'ATM' ? <Image source={require('../pictures/pointer_atm.png')} style={{ width: 40, height: 50 }} />
                                     : <View />
                             }
                         </Marker> : <View />
@@ -574,7 +575,7 @@ export default class MainPage extends Component {
                         <MapViewDirections
                             origin={{ latitude: this.state.currentPositionLatitude, longitude: this.state.currentPositionLongitude }}
                             destination={{ latitude: this.state.item.latitude, longitude: this.state.item.longitude }}
-                            apikey={'AIzaSyDGRIkhrfyhXfwmzRRX6TTyZ6XmvAsW4Iw&fbclid'}
+                            apikey={'AIzaSyDO2cMTkAJG0fXbLCCKKiEyBPPGiItEgF4'}
                             strokeWidth={3}
                             strokeColor='#c84bc8'
                         /> : <View />
@@ -583,35 +584,37 @@ export default class MainPage extends Component {
                         this.directFilter() : <View />
                     }
                 </MapView>
-                <View style={styles.findingBox}>
-                    <Image source={require('../pictures/map.png')} style={{ width: 30, height: 30 }} />
-                    <TextInput
-                        style={{ width: width * 4 / 5, flex: 8 }}
-                        placeholder='Tìm kiếm địa điểm'
-                        onChangeText={this.updateSearch}
-                        value={this.state.search}
-                        maxLength={35}
-                        onFocus={onFocus}
-                    />
-                    {this.state.search != '' ?
-                        <TouchableOpacity onPress={() => this.setState({ search: '' })}>
-                            <Image source={require('../pictures/clear.png')} style={{ width: 20, height: 20 }} />
-                        </TouchableOpacity> : <View />
-                    }
-                    <SectionedMultiSelect
-                        items={this.renderItems()}
-                        IconRenderer={Icon}
-                        uniqueKey="id"
-                        subKey="children"
-                        showDropDowns={true}
-                        readOnlyHeadings={true}
-                        onSelectedItemsChange={this.onSelectedItemsChange}
-                        onConfirm={this.onSelectedConfirm}
-                        selectedItems={this.state.selectedItems}
-                        style={{ flex: 1 }}
-                        showChips={false}
-                        searchPlaceholderText="Search"
-                    />
+                <View style={styles.headerMainPage}>
+                    <View style={styles.findingBox}>
+                        <Image source={require('../pictures/map.png')} style={{ width: 30, height: 30 }} />
+                        <TextInput
+                            style={{ width: width * 4 / 5, flex: 8 }}
+                            placeholder='Tìm kiếm địa điểm'
+                            onChangeText={this.updateSearch}
+                            value={this.state.search}
+                            maxLength={35}
+                            onFocus={onFocus}
+                        />
+                        {this.state.search != '' ?
+                            <TouchableOpacity onPress={() => this.setState({ search: '' })}>
+                                <Image source={require('../pictures/clear.png')} style={{ width: 20, height: 20 }} />
+                            </TouchableOpacity> : <View />
+                        }
+                        <SectionedMultiSelect
+                            items={this.renderItems()}
+                            IconRenderer={Icon}
+                            uniqueKey="id"
+                            subKey="children"
+                            showDropDowns={true}
+                            readOnlyHeadings={true}
+                            onSelectedItemsChange={this.onSelectedItemsChange}
+                            onConfirm={this.onSelectedConfirm}
+                            selectedItems={this.state.selectedItems}
+                            style={{ flex: 1 }}
+                            showChips={false}
+                            searchPlaceholderText="Search"
+                        />
+                    </View>
                 </View>
                 {this.state.isFocus ?
                     <ScrollView style={styles.listSearch} keyboardShouldPersistTaps='handled'>
@@ -634,13 +637,12 @@ export default class MainPage extends Component {
                 }
                 {this.state.info ?
                     <View style={styles.info}>
-
                         {this.state.fetching ?
                             <View style={{ height: 100, borderColor: '#5ec3f2', borderWidth: 1, borderRadius: 5, backgroundColor: 'white', justifyContent: 'center' }}>
                                 <ActivityIndicator size='large' />
                             </View>
                             :
-                            <View style={{ padding: 5, borderColor: '#5ec3f2', borderWidth: 1, borderRadius: 5, backgroundColor: 'white', justifyContent: 'space-around' }}>
+                            <View style={{ minHeight: height / 4, padding: 5, borderColor: '#5ec3f2', borderWidth: 1, borderRadius: 5, backgroundColor: 'white', justifyContent: 'space-around' }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     {this.state.item.types == 'gas' ?
                                         <Image source={require('../pictures/gas.png')} style={{ width: 70, height: 70 }} />
@@ -678,7 +680,8 @@ export default class MainPage extends Component {
                                         <TouchableOpacity onPress={() => this.setState({ mode: 'walking' })}>
                                             <Image source={require('../pictures/phone.png')} style={{ width: 23, height: 23 }} />
                                         </TouchableOpacity>
-                                        <Text style={{ color: '#5ec3f2' }} onPress={() => { Linking.openURL('tel:' + item.phone); }}> {item.phone}</Text>
+                                        <Text> </Text>
+                                        <Text style={{ color: 'black', textDecorationLine: 'underline' }} onPress={() => { Linking.openURL('tel:' + item.phone); }}>{item.phone}</Text>
                                     </View>
                                     {this.state.mode == 'driving' ?
                                         <View style={{ flexDirection: 'row' }}>
@@ -720,7 +723,7 @@ export default class MainPage extends Component {
                                 <ActivityIndicator size='large' />
                             </View>
                             :
-                            <View style={{ padding: 5, borderColor: '#5ec3f2', borderWidth: 1, borderRadius: 5, backgroundColor: 'white', justifyContent: 'space-around' }}>
+                            <View style={{ minHeight: height / 4, padding: 5, borderColor: '#5ec3f2', borderWidth: 1, borderRadius: 5, backgroundColor: 'white', justifyContent: 'space-around' }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     {this.state.item.types == 'gas' ?
                                         <Image source={require('../pictures/gas.png')} style={{ width: 70, height: 70 }} />
@@ -758,7 +761,8 @@ export default class MainPage extends Component {
                                         <TouchableOpacity onPress={() => this.setState({ mode: 'walking' })}>
                                             <Image source={require('../pictures/phone.png')} style={{ width: 23, height: 23 }} />
                                         </TouchableOpacity>
-                                        <Text style={{ color: '#5ec3f2' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}> {this.state.item.phone}</Text>
+                                        <Text> </Text>
+                                        <Text style={{ color: 'black', textDecorationLine: 'underline' }} onPress={() => { Linking.openURL('tel:' + this.state.item.phone); }}>{this.state.item.phone}</Text>
                                     </View>
                                     {this.state.mode == 'driving' ?
                                         <View style={{ flexDirection: 'row' }}>

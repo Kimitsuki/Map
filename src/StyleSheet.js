@@ -4,11 +4,11 @@ let { height, width } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   findingBox: {
-    position: 'absolute',
-    width: width,
-    height: 50,
+    height: 40,
     marginTop: 30,
-    paddingHorizontal: 10,
+    margin: 10,
+    paddingHorizontal: 5,
+    borderRadius: 25 / 2,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white'
@@ -123,13 +123,24 @@ export const styles = StyleSheet.create({
   headerBackground: {
     width: '100%',
     height: 80,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    backgroundColor: '#5ec3f2',
+    flexDirection: 'row',
+  },
+  headerMainPage: {
+    position: 'absolute',
+    width: '100%',
+    height: 80,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
     backgroundColor: '#5ec3f2',
   },
   bigWhite: {
     color: 'white',
     fontSize: 22,
     marginTop: 30,
-    marginLeft: 20
+    marginLeft: 20,
   },
   container: {
     ...StyleSheet.absoluteFillObject,
