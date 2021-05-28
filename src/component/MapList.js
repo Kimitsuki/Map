@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, StatusBar, TouchableOpacity, Dimensions, ActivityIndicator, Linking, AsyncStorage } from 'react-native';
+import { Text, View, Image, StatusBar, TouchableOpacity, Dimensions, ActivityIndicator, Linking, BackHandler, AsyncStorage } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { styles } from '../StyleSheet';
@@ -33,6 +33,7 @@ export default class MapList extends Component {
         }
     }
     async componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.goBack());
         this.currentPosition();
         this.updateList();
         this.setState({

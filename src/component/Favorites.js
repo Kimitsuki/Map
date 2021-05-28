@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, AsyncStorage, FlatList, Text, TouchableOpacity, Image, Linking } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, Image, Linking, AsyncStorage } from 'react-native';
 import { styles } from '../StyleSheet';
 import Geolocation from '@react-native-community/geolocation';
 import { NavigationEvents } from 'react-navigation';

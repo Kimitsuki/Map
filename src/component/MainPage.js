@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Image, StatusBar, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, Keyboard, Linking, NetInfo, Alert, Platform, AsyncStorage } from 'react-native';
+import { Text, TextInput, View, Image, StatusBar, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, Keyboard, Linking, NetInfo, Alert, Platform, BackHandler, AsyncStorage } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { styles } from '../StyleSheet';
@@ -59,7 +59,22 @@ export default class MainPage extends Component {
             favorites: [],
         }
     }
+    handleBackButton = () => {
+        Alert.alert(
+            'Thoát ứng dụng',
+            'Bạn có chắc muốn thoát?', [{
+                text: 'HỦY',
+            }, {
+                text: 'ĐỒNG Ý',
+                onPress: () => BackHandler.exitApp()
+            },], {
+            cancelable: false
+        }
+        )
+        return true;
+    }
     async componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         this.currentPosition();
         this.getLog();
         FetchData.data().then(res => {
@@ -172,12 +187,13 @@ export default class MainPage extends Component {
     }
     onSelectedConfirm = () => {
         this.setState({
-            confirm: true,
-            oneInfo: false,
             latitude: 0,
             longitude: 0,
+            confirm: true,
+            oneInfo: false,
+            info: false,
+            direct: false,
             directFilter: false,
-            direct: false
         })
     }
     getTypes() {

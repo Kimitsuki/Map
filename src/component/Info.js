@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, Image, StatusBar, Linking, TouchableOpacity } from 'react-native';
+import { Text, Dimensions, View, Image, StatusBar, Linking, TouchableOpacity, BackHandler } from 'react-native';
 import { styles } from '../StyleSheet'
 
 let { height, width } = Dimensions.get('window');
@@ -12,6 +12,9 @@ export default class Info extends Component {
             distance: this.props.navigation.state.params.distance,
             duration: this.props.navigation.state.params.duration,
         }
+    }
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.goBack());
     }
     render() {
         const openURL = (email) => {
