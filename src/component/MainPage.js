@@ -538,7 +538,7 @@ export default class MainPage extends Component {
     }
     render() {
         const { search } = this.state
-        const onFocus = () => this.setState({ isFocus: true })
+        const onFocus = () => this.setState({ isFocus: true, info: false, oneInfo: false })
         let str = this.state.key
         let item = this.state.itemInfo
         if (this.state.isLoading) {
