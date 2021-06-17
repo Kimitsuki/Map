@@ -29,7 +29,7 @@ export default class Info extends Component {
                 <StatusBar backgroundColor='transparent' barStyle='dark-content' translucent={true} />
                 <View style={styles.headerBackground}>
                     <TouchableOpacity style={{ marginTop: 30, marginLeft: 20 }} onPress={() => this.props.navigation.goBack()}>
-                        <Image source={require('../pictures/back_white.png')} style={{ width: 15, height: 30 }} />
+                        <Image source={require('../pictures/back.png')} style={{ width: 15, height: 30 }} />
                     </TouchableOpacity>
                     <Text style={styles.bigWhite}>Chi tiết</Text>
                 </View>

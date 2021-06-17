@@ -42,7 +42,7 @@ export default class MapList extends Component {
         })
     }
     fetchDistance(lat1, lon1, lat2, lon2) {
-        let key = 'AIzaSyCOoszPDiUzYkmLt13L9Bxui0dUk7GAWvk';
+        let key = 'AIzaSyDO2cMTkAJG0fXbLCCKKiEyBPPGiItEgF4';
         this.setState({ fetching: true })
         let urlDriving = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=driving&key=' + key;
         let urlWalking = 'https://maps.googleapis.com/maps/api/directions/json?origin=' + lat1 + ',' + lon1 + '&destination=' + lat2 + ',' + lon2 + '&mode=walking&key=' + key;
@@ -183,9 +183,11 @@ export default class MapList extends Component {
                         : <View />
                     }
                 </MapView>
-                <TouchableOpacity style={{ position: 'absolute', width: 15, height: 30, marginTop: 30, marginLeft: 20 }} onPress={() => this.props.navigation.goBack()}>
-                    <Image source={require('../pictures/back_black.png')} style={{ width: 15, height: 30 }} />
-                </TouchableOpacity>
+                <View style={styles.headerMainPage}>
+                    <TouchableOpacity style={{ marginTop: 30, marginLeft: 20 }} onPress={() => this.props.navigation.goBack()}>
+                        <Image source={require('../pictures/back.png')} style={{ width: 15, height: 30 }} />
+                    </TouchableOpacity>
+                </View>
                 {this.state.oneInfo ?
                     <View style={styles.info}>
                         {this.state.fetching ?
